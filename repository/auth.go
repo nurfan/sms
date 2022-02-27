@@ -9,7 +9,7 @@ import (
 )
 
 // GetReminderLog ...
-func (r *RepositoryPsql) GetUser(ctx context.Context, username string) (result model.Account, err error) {
+func (r *RepositoryPsql) GetAccount(ctx context.Context, username string) (result model.Account, err error) {
 
 	query := `SELECT
 					acc.user_id,
@@ -25,11 +25,14 @@ func (r *RepositoryPsql) GetUser(ctx context.Context, username string) (result m
 					acc.created_by,
 					acc.created_at,
 					acc.updated_by,
-					acc.updated_at
+					acc.updated_at,
+					acc.section_id,
+					se.name AS section_name
 				FROM 
 					accounts acc
 				JOIN 
 					roles ro ON acc.role_id = ro.id 
+					sections se ON se.id = acc.section_id
 				WHERE
 					acc.username = $1`
 

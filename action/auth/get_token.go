@@ -20,7 +20,7 @@ func (gt *GetToken) Handle(ctx context.Context, req model.GetTokenRequest) (*mod
 	var result model.GetTokenResponse
 
 	// get account
-	users, err := gt.repo.GetUser(ctx, req.Username)
+	users, err := gt.repo.GetAccount(ctx, req.Username)
 	if err != nil {
 		return nil, gt.e.SystemError(err)
 	}
@@ -30,11 +30,11 @@ func (gt *GetToken) Handle(ctx context.Context, req model.GetTokenRequest) (*mod
 		users.UserID,
 		users.Username,
 		users.Nickname,
-		1,
-		"Safety Officer",
+		users.RoleID,
+		users.RoleName,
 		users.Email,
-		1,
-		"safety section",
+		users.SectionID,
+		users.SectionName,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
 		},
